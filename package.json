@@ -1,6 +1,23 @@
 {
+  "name": "heaven",
+  "version": "1.0.0",
+  "description": "backend of seventeen",
+  "repository": {
+    "type": "git",
+    "url": "heaven"
+  },
+  "license": "MIT",
+  "author": "sayces",
+  "type": "commonjs",
+  "main": "src/app.js",
+  "scripts": {
+    "node": ""
+  },
   "dependencies": {
     "express": "^5.3.0",
     "nodemon": "^3.1.14"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5"
   }
 }
