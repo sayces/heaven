@@ -8,16 +8,20 @@
   },
   "license": "MIT",
   "author": "sayces",
-  "type": "commonjs",
-  "main": "src/app.js",
+  "type": "module",
+  "main": "src/app.ts",
   "scripts": {
-    "node": ""
+    "start": "nodemon --exec tsx src/app.ts"
   },
   "dependencies": {
     "express": "^5.3.0",
     "nodemon": "^3.1.14"
   },
   "devDependencies": {
-    "@types/node": "^26.6.5"
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }
