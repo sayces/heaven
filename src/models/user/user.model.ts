@@ -1,4 +1,4 @@
-import { users } from "./mock";
+import { users } from "./user.mock";
 import { User } from "./types";
 
 export const UserModel = {

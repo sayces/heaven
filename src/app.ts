@@ -1,12 +1,10 @@
 import express from "express";
-import UserController from "@/controllers/index";
+import rootRouter from "./router";
 
 const PORT = 5000;
-
 const app = express();
 
-app.get("/", (req, res) => res.send("welcome"));
-app.get("/users", UserController.getAll);
-app.post("/users/create", UserController.create);
+app.use("/api", rootRouter);
+app.use(express.json());
 
 app.listen(PORT, () => console.log("server started on PORT:", PORT));

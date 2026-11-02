@@ -1,5 +1,6 @@
 import UserModel from "@/models/index";
 import { Response, Request } from "express";
+import { errorSender } from "../utils/errorSender";
 
 export const UserController = {
   // POST /users/create
@@ -9,16 +10,16 @@ export const UserController = {
       if (!name || !password) {
         res
           .status(400)
-          .json({ message: "Имя пользователя или пароль не переданы" });
+          .json({ message: "ERR: Login or password has not passed" });
+        return;
       }
       const newUser = await UserModel.create({ name, password });
 
-      res.status(201).json(newUser).redirect("/");
+      res.status(201).json(newUser);
     } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Не удалось создать пользователя";
-
-      res.status(500).json({ message: errorMessage });
+      res
+        .status(500)
+        .json({ message: errorSender(err, "ERR: Cannot create user") });
     }
   },
 
@@ -29,52 +30,85 @@ export const UserController = {
 
       res.json(usersList);
     } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Не удалось получить список пользователей";
-
-      res.status(500).json({ message: errorMessage });
+      res
+        .status(500)
+        .json({ message: errorSender(err, "ERR: Cannot get list of users") });
     }
   },
 
   // GET /users/:id
   async getById(req: Request, res: Response): Promise<void> {
     try {
-      const { id } = req.body;
-      if (!id) throw new Error("ID пользователя не передан");
-      UserModel.getById(id);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Не удалось получить пользователя";
+      const { id } = req.params;
 
-      res.status(500).json({ message: errorMessage });
+      if (typeof id !== "string") {
+        res.status(400).json({ message: "ERR: Id format is not valid" });
+        return;
+      }
+
+      if (!id) {
+        res.status(400).json({ message: "ERR: Id has not passed" });
+        return;
+      }
+      const user = await UserModel.getById(id);
+      if (!user) {
+        res.status(404).json({ message: "ERR: User has not found" });
+        return;
+      }
+
+      res.status(200).json(user);
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: errorSender(err, "ERR: Cannot get user by id") });
     }
   },
+
+  // DELETE /users/:id
   async removeById(req: Request, res: Response): Promise<void> {
     try {
-      const { id } = req.body;
-      if (!id) throw new Error("ID пользователя не передан");
-      UserModel.removeById(id);
-    } catch (err) {}
+      const { id } = req.params;
+      if (!id) res.status(400).json({ message: "ERR: User Id has not passed" });
+      if (typeof id !== "string") {
+        res.status(400).json({ message: "ERR: Id format is not valid" });
+        return;
+      }
+
+      const deletedUser = await UserModel.removeById(id);
+      if (!deletedUser) {
+        res.status(404).json({ message: "ERR: User not found" });
+        return;
+      }
+
+      res.status(200).json(deletedUser);
+    } catch (err: unknown) {
+      res
+        .status(500)
+        .json({ message: errorSender(err, "ERR: Cannot delete user") });
+    }
   },
+
+  // PUT /users/:id
   async updateById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
+
+      if (typeof id !== "string") {
+        res.status(400).json({ message: "ERR: Id format is not valid" });
+        return;
+      }
+
       const updatedUser = await UserModel.updateById(id, req.body);
       if (!updatedUser) {
-        res
-          .status(404)
-          .json({ message: "Пользователь для обновления не найден" });
+        res.status(404).json({ message: "ERR: User not found" });
         return;
       }
 
       res.status(200).json(updatedUser);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Не удалось обновить пользователя";
-
-      res.status(500).json({ message: errorMessage });
+    } catch (err: unknown) {
+      res
+        .status(500)
+        .json({ message: errorSender(err, "ERR: Cannot update user") });
     }
   },
 };
