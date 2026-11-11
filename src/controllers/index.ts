@@ -1,2 +1,1 @@
-import { UserController } from "@/controllers/user/user.controller";
-export default UserController;
+export { UserController } from "@/controllers/user/user.controller";

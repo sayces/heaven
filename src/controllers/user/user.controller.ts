@@ -1,4 +1,4 @@
-import UserModel from "@/models/index";
+import { UserModel } from "@/models";
 import { Response, Request } from "express";
 import { errorSender } from "../utils/errorSender";
 
@@ -40,17 +40,7 @@ export const UserController = {
   async getById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-
-      if (typeof id !== "string") {
-        res.status(400).json({ message: "ERR: Id format is not valid" });
-        return;
-      }
-
-      if (!id) {
-        res.status(400).json({ message: "ERR: Id has not passed" });
-        return;
-      }
-      const user = await UserModel.getById(id);
+      const user = await UserModel.getById(id as string);
       if (!user) {
         res.status(404).json({ message: "ERR: User has not found" });
         return;
@@ -68,13 +58,8 @@ export const UserController = {
   async removeById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      if (!id) res.status(400).json({ message: "ERR: User Id has not passed" });
-      if (typeof id !== "string") {
-        res.status(400).json({ message: "ERR: Id format is not valid" });
-        return;
-      }
 
-      const deletedUser = await UserModel.removeById(id);
+      const deletedUser = await UserModel.removeById(id as string);
       if (!deletedUser) {
         res.status(404).json({ message: "ERR: User not found" });
         return;
@@ -92,13 +77,7 @@ export const UserController = {
   async updateById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-
-      if (typeof id !== "string") {
-        res.status(400).json({ message: "ERR: Id format is not valid" });
-        return;
-      }
-
-      const updatedUser = await UserModel.updateById(id, req.body);
+      const updatedUser = await UserModel.updateById(id as string, req.body);
       if (!updatedUser) {
         res.status(404).json({ message: "ERR: User not found" });
         return;

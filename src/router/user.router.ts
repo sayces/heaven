@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UserController } from "@/controllers/user/user.controller";
+import { UserController } from "@/controllers";
 import { validateId } from "@/middlewares/user/validateId";
 
 export const userRouter = Router();

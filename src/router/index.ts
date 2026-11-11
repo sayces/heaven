@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { userRouter } from "./user.router";
 // import authRouter from "./authRoutes";
 
-const rootRouter = Router();
+export const rootRouter = Router();
 
 // root gateway
 rootRouter.get("/", (req: Request, res: Response): void => {
@@ -18,4 +18,3 @@ rootRouter.use("/users", userRouter);
 // auth
 // rootRouter.use("/auth", authRouter);
 
-export default rootRouter;
