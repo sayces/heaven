@@ -24,7 +24,7 @@ export const UserController = {
   },
 
   // GET /users
-  async getAll(req: Request, res: Response): Promise<void> {
+  async getAll(_req: Request, res: Response): Promise<void> {
     try {
       const usersList = await UserModel.getAll();
 

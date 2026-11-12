@@ -5,7 +5,7 @@ import { userRouter } from "./user.router";
 export const rootRouter = Router();
 
 // root gateway
-rootRouter.get("/", (req: Request, res: Response): void => {
+rootRouter.get("/", (_req: Request, res: Response): void => {
   res.status(200).json({
     status: "success",
     message: "Welcome to the API v1",
