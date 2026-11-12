@@ -42,8 +42,8 @@ export const UserModel = {
     data: Partial<Omit<User, "id">>,
   ): Promise<User | null> {
     const user = users.find((user) => user.id === id);
-
-    Object.assign(user!, data);
-    return user ? { ...user } : null;
+    if (!user) return null;
+    Object.assign(user, data);
+    return { ...user };
   },
 };
